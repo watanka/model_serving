@@ -1,0 +1,6 @@
+dirname: 'experiment'
+expname: 'mnist'
+
+lr: 1e-4
+batchsize : 128
+max_epochs: 100
