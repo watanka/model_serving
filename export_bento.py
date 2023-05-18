@@ -9,7 +9,7 @@ from model import LightningModel
 
 config = read_yaml('config.yaml')
 plmodel = LightningModel(config)
-plmodel.load_state_dict(torch.load('mnist_weight.ckpt'))
+plmodel.load_from_checkpoint('mnist_weight.ckpt')
 # # TypeError: 'model' must be an instance of 'pl.LightningModule', got <class 'model.LightningModel'> instead.
 # # error occurs when model has parameter to fill in.
 
@@ -29,15 +29,15 @@ plmodel.to_onnx('model.onnx', input_sample, export_params = True)
 
 
 # # save model and retrieve corresponding tag
-# onnx_model = onnx.load('model.onnx')
+onnx_model = onnx.load('model.onnx')
 
-# signatures = {
-#     'run' : {'batchable' : True,
-#              'batch_dim' : 0    
-#             }
-# }
+signatures = {
+    'run' : {'batchable' : True,
+             'batch_dim' : 0    
+            }
+}
 
-# bentoml.onnx.save_model('MNIST', onnx_model, signatures = signatures)
+bentoml.onnx.save_model('MNIST', onnx_model, signatures = signatures)
 # tag = bentoml.pytorch_lightning.save_model('MNIST', LightningModel())
 
 # # retrieve metadata with 'bentoml.models.get':
