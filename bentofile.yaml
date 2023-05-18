@@ -1,0 +1,11 @@
+service: "service:svc"
+labels:
+  owner: eunsung
+  stage: dev
+include:
+- "*.py"
+- "*.jpg"
+python:
+  packages:
+  - lightning
+  - numpy
