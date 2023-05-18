@@ -1,8 +1,10 @@
 import torch
+import onnx
+import onnxruntime
 import bentoml
 from utils import read_yaml
 from model import LightningModel
-import onnxruntime
+
 
 
 # config = read_yaml('config.yaml')
@@ -15,9 +17,10 @@ input_sample = torch.randn((1,28,28))
 # plmodel.to_onnx('model.onnx', input_sample, export_params = True)
 
 # infer with onnx
+
 ort_session = onnxruntime.InferenceSession("model.onnx")
 # compute ONNX Runtime output prediction
-ort_inputs = {ort_session.get_inputs()[0].name: to_numpy(x)}
+ort_inputs = {ort_session.get_inputs()[0].name: input_sample.numpy()}
 # ONNX Runtime will return a list of outputs
 ort_outs = ort_session.run(None, ort_inputs)
 print(ort_outs[0])
@@ -25,8 +28,13 @@ print(ort_outs[0])
 
 
 # save model and retrieve corresponding tag
+onnx_model = onnx.load('model.onnx')
 
-bentoml.onnx.save_model
+signatures = {
+    'run' : {'batchable' : True}
+}
+
+bentoml.onnx.save_model('MNIST', onnx_model, signatures = signatures)
 # tag = bentoml.pytorch_lightning.save_model('MNIST', LightningModel())
 
 # # retrieve metadata with 'bentoml.models.get':
