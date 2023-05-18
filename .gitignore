@@ -1,5 +1,5 @@
 data/
 __pycache__
-# *.pt
-# *.ckpt
+*.pt
+*.ckpt
 experiment/
